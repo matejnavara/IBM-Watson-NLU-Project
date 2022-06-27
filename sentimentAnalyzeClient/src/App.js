@@ -10,11 +10,12 @@ class App extends React.Component {
   value of the state, will be returned. The initial input mode
   is set to text
   */
-  state = {innercomp:<textarea rows="4" cols="50" id="textinput"/>,
-            mode: "text",
-          sentimentOutput:[],
-          sentiment:true
-        }
+  state = {
+    innercomp:<textarea rows="4" cols="50" id="textinput"/>,
+    mode: "text",
+    sentimentOutput:[],
+    sentiment:true
+  }
   
   /*
   This method returns the component based on what the input mode is.
@@ -43,19 +44,30 @@ class App extends React.Component {
     let mode = this.state.mode
     url = url+"/" + mode + "/sentiment?"+ mode + "="+document.getElementById("textinput").value;
 
-    fetch(url).then((response)=>{
-        response.json().then((data)=>{
-        this.setState({sentimentOutput:data.label});
-        let output = data.label;
-        let color = "white"
-        switch(output) {
-          case "positive": color = "black";break;
-          case "negative": color = "black";break;
-          default: color = "black";
-        }
-        output = <div style={{color:color,fontSize:20}}>{output}</div>
-        this.setState({sentimentOutput:output});
-      })});
+    fetch(url).then(async (response) => {
+      const isJson = response.headers.get('content-type')?.includes('application/json');
+      const data = isJson ? await response.json() : null;
+
+      // check for error response
+      if (!response.ok) {
+        // get error message from body or default to response status
+        const error = response;
+        return Promise.reject(error);
+      }
+
+      let output = data.label;
+      let color = "white"
+      switch(output) {
+        case "positive": color = "green";break;
+        case "negative": color = "red";break;
+        default: color = "yellow";
+      }
+      output = <div style={{color:color,fontSize:20}}>{output}</div>
+      this.setState({sentimentOutput:output});
+    })
+    .catch((error) => {        
+      this.setState({sentimentOutput:<p>{error.statusText}</p>});
+    });
   }
 
   sendForEmotionAnalysis = () => {
@@ -65,10 +77,20 @@ class App extends React.Component {
     let mode = this.state.mode
     url = url+"/" + mode + "/emotion?"+ mode + "="+document.getElementById("textinput").value;
 
-    fetch(url).then((response)=>{
-      response.json().then((data)=>{
-      this.setState({sentimentOutput:<EmotionTable emotions={data}/>});
-  })})  ;
+    fetch(url).then(async (response) => {
+        const isJson = response.headers.get('content-type')?.includes('application/json');
+        const data = isJson ? await response.json() : null;
+
+        // check for error response
+        if (!response.ok) {
+          // get error message from body or default to response status
+          const error = response;
+          return Promise.reject(error);
+        }
+        this.setState({sentimentOutput:<EmotionTable emotions={data}/>});
+      }).catch((error) => {        
+        this.setState({sentimentOutput:<p>{error.statusText}</p>});
+    });
   }
   
 

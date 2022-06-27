@@ -54,7 +54,8 @@ app.get("/url/emotion", (req,res) => {
      
      naturalLanguageUnderstanding.analyze(analyzeParams)
      .then(analysisResults => {
-        return res.send(analysisResults.result.keywords[0].emotion,null,2);
+        const emotionResult = analysisResults.result.keywords[0]?.emotion || [];
+        return res.send(emotionResult,null,2);
      })
      .catch(err => {
         return res.send("Could not do desired operation "+err);
@@ -79,7 +80,8 @@ app.get("/url/sentiment", (req,res) => {
      
      naturalLanguageUnderstanding.analyze(analyzeParams)
      .then(analysisResults => {
-        return res.send(analysisResults.result.keywords[0].sentiment,null,2);
+        const sentimentResult = analysisResults.result.keywords[0]?.sentiment || [];
+        return res.send(sentimentResult,null,2);
      })
      .catch(err => {
         return res.send("Could not do desired operation "+err);
@@ -104,10 +106,11 @@ app.get("/text/emotion", (req,res) => {
      
      naturalLanguageUnderstanding.analyze(analyzeParams)
      .then(analysisResults => {
-        return res.send(analysisResults.result.keywords[0].emotion,null,2);
+        const emotionResult = analysisResults.result.keywords[0]?.emotion || [];
+        return res.send(emotionResult,null,2);
      })
      .catch(err => {
-        return res.send("Could not do desired operation "+err);
+        return res.status(err.code).send("Could not do desired operation: "+err.statusText);
      });
 });
 
@@ -128,7 +131,8 @@ app.get("/text/sentiment", (req,res) => {
      
      naturalLanguageUnderstanding.analyze(analyzeParams)
      .then(analysisResults => {
-        return res.send(analysisResults.result.keywords[0].sentiment,null,2);
+        const sentimentResult = analysisResults.result.keywords[0]?.sentiment || [];
+        return res.send(sentimentResult,null,2);
      })
      .catch(err => {
         return res.send("Could not do desired operation "+err);

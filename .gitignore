@@ -4,6 +4,7 @@
 .DS_Store
 */.DS_Store
 */node_modules
+sentimentAnalyzeServer/client/static
 
 __pycache__/
 *.py[cod]
