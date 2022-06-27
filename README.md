@@ -9,4 +9,6 @@ Pass it text or URL to analyze sentiment/emotions.
 Joy? Fear? Anger? Disgust? Sadness?
 Positive? Neutral? Negative?
 
+[TRY IT OUT](https://ibm-watson-radish-sentiment-analyzer-empathic-possum-uz.mybluemix.net/)
+
 Watson is on the case 🕵️‍♂️
