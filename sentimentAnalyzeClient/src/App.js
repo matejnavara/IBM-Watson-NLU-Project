@@ -31,10 +31,11 @@ class App extends React.Component {
       mode = "text"
       rows = 4
     }
-      this.setState({innercomp:<textarea rows={rows} cols="50" id="textinput"/>,
-      mode: mode,
-      sentimentOutput:[],
-      sentiment:true
+      this.setState({
+        innercomp:<textarea rows={rows} cols="50" id="textinput"/>,
+        mode: mode,
+        sentimentOutput:[],
+        sentiment:true
       });
   } 
   
@@ -55,12 +56,12 @@ class App extends React.Component {
         return Promise.reject(error);
       }
 
-      let output = data.label;
+      let output = data.label || 'No sentiment detected';
       let color = "white"
       switch(output) {
         case "positive": color = "green";break;
         case "negative": color = "red";break;
-        default: color = "yellow";
+        default: color = "orange";
       }
       output = <div style={{color:color,fontSize:20}}>{output}</div>
       this.setState({sentimentOutput:output});
@@ -97,8 +98,10 @@ class App extends React.Component {
   render() {
     return (  
       <div className="App">
-      <button className="btn btn-info" onClick={()=>{this.renderOutput('text')}}>Text</button>
-        <button className="btn btn-dark"  onClick={()=>{this.renderOutput('url')}}>URL</button>
+        <img src="/RobotThink.png" alt="Robot is thinking" width="300px" />
+        <br/><br/>
+        <button className={this.state.mode === "text" ? "btn btn-info" : "btn btn-dark"} onClick={()=>{this.renderOutput('text')}}>Text</button>
+        <button className={this.state.mode === "url" ? "btn btn-info" : "btn btn-dark"}  onClick={()=>{this.renderOutput('url')}}>URL</button>
         <br/><br/>
         {this.state.innercomp}
         <br/>
