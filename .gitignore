@@ -1,6 +1,9 @@
 # Byte-compiled / optimized / DLL files
 
 .vscode
+.DS_Store
+*/.DS_Store
+*/node_modules
 
 __pycache__/
 *.py[cod]
